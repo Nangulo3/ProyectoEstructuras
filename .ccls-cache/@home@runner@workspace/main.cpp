@@ -77,17 +77,18 @@ void ejecutar_comando(string entrada) {
         cout << "Recuerde, para usar el comando decodificar_archivo, se debe usar el formato: decodificar_archivo archivo.huf salida.pgm" << endl;
     } else if (comando == "decodificar_archivo" && partes.size() == 2) {
         cout << "Decodificando " << partes[0] << " y guardando en " << partes[1] << endl;
-    } else if (comando == "segmentar" && (partes.size() < 4 || partes.size() % 3 != 2)) {
+    } else if (comando == "segmentar" && (partes.size() < 4 || partes.size() % 3 != 1)) {
         cout << "Recuerde que para usar el comando segmentar, se debe usar el formato: segmentar salida.pgm sx1 sy1 sl1 (para s múltiplos del 3) "<< endl;
-    } else if (comando == "segmentar" && partes.size() >= 4 && partes.size() % 3 == 2) {
+    } else if (comando == "segmentar" && partes.size() >= 4 && partes.size() % 3 == 1) {
         cout << "Segmentando imagen y guardando en: " << partes[0] << endl;
         
-    } else if (comando == "cargar_volumen" && partes.size() == 2) {
-            cout << "El volumen "<< partes[0] << "ha sido cargado "  << endl;
+    
     } else if (comando == "cargar_volumen" && partes.size() != 2) {
             cout << "Recuerde que para usar el comando cargar_volumen, se debe usar el formato: cargar_volumen nombre_basexx.pgm n_im"<< endl;
-    } else if (comando == "cargar_volumen" && partes.size() == 2 && partes[0].size() > 17) {
-            cout << "Recuerde que para usar el comando cargar_volumen, se debe usar el formato: cargar_volumen nombre_basexx.pgm n_im"<< endl;        
+    } else if (comando == "cargar_volumen" && partes[0].size() > 17) {
+            cout << "Recuerde que el numero de imagen debe estar entre 1 y 99"<< endl;     
+        } else if (comando == "cargar_volumen" && partes.size() == 2) {
+            cout << "El volumen "<< partes[0] << " ha sido cargado "  << endl;
     } else {
         cout << "Error: Comando no reconocido o mal uso. Use 'ayuda' para más detalles." << endl;
     }
