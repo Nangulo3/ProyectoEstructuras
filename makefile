@@ -1,20 +1,31 @@
-# Compilador
+# Nombre del ejecutable
+TARGET = programa.exe
+
+# Carpetas
+SRC_DIR = src
+INC_DIR = headers
+
+# Compilador y flags
 CXX = g++
+CXXFLAGS = -std=c++17 -I$(INC_DIR) -Wall -Wextra
 
-# Flags
-CXXFLAGS = -I headers
+# Archivos fuente y objetos
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(SRCS:.cpp=.o)
 
-# Archivos fuente y ejecutable
-SRC = $(wildcard src/*.cpp)
-OUT = programa
+# Regla por defecto
+all: $(TARGET)
 
-# Regla principal
-all: $(OUT)
+# Regla de construcción del ejecutable
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(OUT): $(SRC)
-	$(CXX) -o $@ $^ $(CXXFLAGS)
+# Reglas para compilar cada archivo objeto
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Limpiar archivos generados
 clean:
-	del /Q $(OUT).exe 2>nul || rm -f $(OUT)
+	rm -f $(SRC_DIR)/*.o $(TARGET)
+
 

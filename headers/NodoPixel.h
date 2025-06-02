@@ -1,19 +1,30 @@
 #ifndef NODO_PIXEL_H
 #define NODO_PIXEL_H
-#include "../headers/Pixel.h"
+#include "Pixel.h"
 
 class NodoPixel
 {
-public:
+private:
     Pixel pixel;
-    int etiqueta;  // Etiqueta (valor entre 1 y 255)
-    int distancia; // Distancia mínima desde una semilla
-    bool visitado; // Ya fue visitado por Dijkstra
+    long long distancia;
+    bool visitado;
+    int etiqueta;
 
-    NodoPixel(Pixel pixel);
+public:
     NodoPixel();
+    NodoPixel(Pixel pixel);
+
+    long long getDistancia() const;
+    void setDistancia(long long d);
+
+    bool isVisitado() const;
+    void setVisitado(bool v);
+
+    int getEtiqueta() const;
+    void setEtiqueta(int e);
+
+    Pixel getPixel() const;
     bool operator>(const NodoPixel &other) const;
-    Pixel getPixel();
 };
 
-#endif
+#endif // NODO_PIXEL_H
