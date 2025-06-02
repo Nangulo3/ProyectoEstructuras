@@ -197,15 +197,57 @@ void ejecutar_comando(string entrada)
         imagenActual.decodificarImagen(rutaEntrada, rutaSalida);
         ////////////////////////////////
     }
-    else if (comando == "segmentar" && (partes.size() < 4 || partes.size() % 3 != 1))
+    else if (comando == "segmentar")
     {
-        cout << "Recuerde que para usar el comando segmentar, se debe usar el formato: segmentar salida.pgm sx1 sy1 sl1 (para s múltiplos del 3) " << endl;
-    }
-    else if (comando == "segmentar" && partes.size() >= 4 && partes.size() % 3 == 1)
-    {
+        if (!imagenCargada)
+        {
+            cout << "Error: No hay una imagen cargada para segmentar." << endl;
+            return;
+        }
+
+        if (partes.size() < 4 || (partes.size() - 1) % 3 != 0)
+        {
+            cout << "Uso incorrecto. Formato: segmentar salida.pgm sx1 sy1 sl1 [sx2 sy2 sl2 ...] (máximo 5 semillas)" << endl;
+            return;
+        }
+
+        int numSemillas = (partes.size() - 1) / 3;
+        if (numSemillas > 5)
+        {
+            cout << "Error: Solo se permiten hasta 5 semillas." << endl;
+            return;
+        }
+
         string rutaSalida = "recursos/" + partes[0];
-        cout << "Segmentando imagen y guardando en: " << partes[0] << endl;
+        vector<tuple<int, int, int>> semillas;
+
+        try
+        {
+            for (int i = 1; i < partes.size(); i += 3)
+            {
+                int x = stoi(partes[i]);
+                int y = stoi(partes[i + 1]);
+                int etiqueta = stoi(partes[i + 2]);
+
+                if (etiqueta < 1 || etiqueta > 255)
+                {
+                    cout << "Error: Las etiquetas deben estar entre 1 y 255." << endl;
+                    return;
+                }
+
+                semillas.emplace_back(x, y, etiqueta);
+            }
+
+            imagenActual.segmentacion(semillas, rutaSalida);
+
+            cout << "Segmentando imagen y guardando en: " << partes[0] << endl;
+        }
+        catch (exception &e)
+        {
+            cout << "Error al procesar las semillas: " << e.what() << endl;
+        }
     }
+
     else if (comando == "cargar_volumen" && partes.size() != 2)
     {
         cout << "Recuerde que para usar el comando cargar_volumen, se debe usar el formato: cargar_volumen nombre_basexx.pgm n_im" << endl;

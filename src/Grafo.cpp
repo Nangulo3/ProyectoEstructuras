@@ -11,6 +11,12 @@ Grafo::Grafo(const std::vector<std::vector<Pixel>> &matrizPixeles, int alto, int
     construirAdyacencia(alto, ancho);
 }
 
+Grafo::Grafo()
+{
+    alto = 0;
+    ancho = 0;
+}
+
 void Grafo::PixelANodoPixel(const std::vector<std::vector<Pixel>> &matrizPixeles, int alto, int ancho)
 {
     nodos.resize(alto, std::vector<NodoPixel>(ancho));
@@ -126,4 +132,9 @@ void Grafo::segmentar(const std::vector<std::tuple<int, int, int>> &semillas)
             }
         }
     }
+}
+
+std::vector<std::vector<NodoPixel>> Grafo::getNodoPixeles()
+{
+    return nodos;
 }
