@@ -21,7 +21,9 @@ private:
 
 public:
     Grafo(const std::vector<std::vector<Pixel>> &matrizPixeles, int alto, int ancho);
+    Grafo();
     void segmentar(const std::vector<std::tuple<int, int, int>> &semillas);
+    std::vector<std::vector<NodoPixel>> getNodoPixeles();
 };
 
 #endif

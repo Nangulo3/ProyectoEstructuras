@@ -166,6 +166,28 @@ void Imagen::guardarImagen(const std::string &nombreArchivo) const
     }
 }
 
+void Imagen::guardarImagen(const std::string &nombreArchivo, std::vector<std::vector<NodoPixel>> matriz) const
+{
+    std::ofstream archivo(nombreArchivo);
+    if (!archivo)
+    {
+        std::cerr << "Error: No se pudo crear el archivo " << nombreArchivo << std::endl;
+    }
+
+    archivo << "P2\n";
+    archivo << ancho << " " << alto << "\n";
+    archivo << maxIntensidad << "\n";
+
+    for (int y = 0; y < alto; y++)
+    {
+        for (int x = 0; x < ancho; x++)
+        {
+            archivo << matriz[y][x].getEtiqueta() << " "; // Las etiquetas fueron llenadas a la hora de segmentar
+        }
+        archivo << "\n";
+    }
+}
+
 void Imagen::infoImagen() const
 {
     std::cout << "Imagen: " << nombreImagen << "\n";
@@ -338,4 +360,12 @@ void Imagen::decodificarImagen(const std::string &archivoEntrada, const std::str
     archivoEntradaBinario.close();
 
     guardarImagen(archivoSalida); // Se guarda la imagen decodificada en el archivo de salida
+}
+
+void Imagen::segmentacion(std::vector<std::tuple<int, int, int>> Semillas, const std::string &nombreArchivo)
+{
+    Grafo g = Grafo(matrizPixeles, alto, ancho); // Crea el grafo, aqui se genera la matriz de NodoPixeles y ademas se crea la lista de adyacencia
+    this->grafo = g;
+    grafo.segmentar(Semillas); // Se llenan los atributos etiqueta para despues ser escritos en el archivo
+    guardarImagen(nombreArchivo, grafo.getNodoPixeles());
 }
